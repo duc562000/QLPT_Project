@@ -24,6 +24,7 @@ const Images = {
         up: require('./icon/ic_up.png'),
         down: require('./icon/ic_down.png'),
         remove: require('./icon/ic_remove.png'),
+        add: require('./icon/ic_add.png'),
     },
     photo: {
         defaultImage: require('./photo/img_default_image.png'),

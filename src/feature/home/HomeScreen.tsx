@@ -13,18 +13,44 @@ const HomeScreen: FunctionComponent = () => {
             <StyledHeader title={'Trang chủ'} isBack={false} />
             <View style={styles.body}>
                 <StyledTouchable
-                    onPress={() => navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_SCREEN)}
+                    onPress={() =>
+                        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_SCREEN, { name: 'Quản lý phòng', isRoom: true })
+                    }
                     customStyle={styles.buttonNavigate}
                 >
                     <StyledText customStyle={styles.textButton} originValue="Quản lý phòng" />
                 </StyledTouchable>
-                <StyledTouchable customStyle={styles.buttonNavigate}>
+                <StyledTouchable
+                    onPress={() =>
+                        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_ROOMER_SCREEN, {
+                            name: 'Quản lý nguời thuê',
+                            isRommer: true,
+                        })
+                    }
+                    customStyle={styles.buttonNavigate}
+                >
                     <StyledText customStyle={styles.textButton} originValue="Quản lý nguời thuê" />
                 </StyledTouchable>
-                <StyledTouchable customStyle={styles.buttonNavigate}>
+                <StyledTouchable
+                    onPress={() =>
+                        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_BILL_SCREEN, {
+                            name: 'Quản lý  hoá đơn ',
+                            isBill: true,
+                        })
+                    }
+                    customStyle={styles.buttonNavigate}
+                >
                     <StyledText customStyle={styles.textButton} originValue="Quản lý  hoá đơn " />
                 </StyledTouchable>
-                <StyledTouchable customStyle={styles.buttonNavigate}>
+                <StyledTouchable
+                    onPress={() =>
+                        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.SETTING_SCREEN, {
+                            name: 'Quản lý cài đặt',
+                            isSetting: true,
+                        })
+                    }
+                    customStyle={styles.buttonNavigate}
+                >
                     <StyledText customStyle={styles.textButton} originValue="Quản lý cài đặt" />
                 </StyledTouchable>
                 <StyledTouchable

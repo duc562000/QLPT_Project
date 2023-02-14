@@ -14,6 +14,7 @@ const Light = {
         ...common,
         primary: '#4287f5',
         secondary: '#BDE4F4',
+        blue: '#4285F4',
         textPrimary: '#000000',
         textSecondary: '#475372',
         backgroundModalUpdate: '#323232',

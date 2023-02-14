@@ -2,24 +2,31 @@ import React, { FunctionComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import StyledHeader from 'components/common/StyledHeader';
 import { StyledList, StyledText, StyledTouchable } from 'components/base';
-import { dataRoom } from 'utilities/staticData';
+import { dataBill, dataRoom, dataRoomer } from 'utilities/staticData';
 import { navigate } from 'navigation/NavigationService';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
+import Images from 'assets/images';
+import ItemRoom from '../components/ItemRoom';
 
-const ManagerScreen: FunctionComponent = () => {
+const ManagerBill: FunctionComponent = ({ route }: any) => {
     const renderItem = ({ item }: any) => (
-        <StyledTouchable
-            onPress={() => navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ROOM_SCREEN)}
-            customStyle={styles.viewButton}
-        >
-            <StyledText originValue={item?.name} />
-        </StyledTouchable>
+        <ItemRoom
+            isPay
+            item={item}
+            roomName={item?.name}
+            onPress={() => navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_BILL_SCREEN, { item })}
+        />
     );
     return (
         <View style={styles.container}>
-            <StyledHeader isBack title={'Home Details'} />
+            <StyledHeader
+                iconAction={route?.params?.isRoom ? Images.icons.add : undefined}
+                onPressAction={() => navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.ADD_ROOM_SCREEN)}
+                isBack
+                title={route?.params?.name}
+            />
             <View style={styles.body}>
-                <StyledList numColumns={3} data={dataRoom} renderItem={renderItem} />
+                <StyledList numColumns={3} data={dataBill} renderItem={renderItem} />
             </View>
         </View>
     );
@@ -43,4 +50,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ManagerScreen;
+export default ManagerBill;

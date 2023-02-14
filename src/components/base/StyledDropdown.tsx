@@ -150,18 +150,20 @@ const StyledDropdown: FC<StyledDropdownProps> = ({
 };
 
 const styles = ScaledSheet.create({
-    container: {},
+    container: {
+        paddingTop: 10,
+    },
     labelContainer: {
         flexDirection: 'row',
-        marginBottom: '4@vs',
+        marginVertical: '6@vs',
     },
     error: {
         borderColor: Themes.COLORS.borderInputError,
     },
     label: {
-        fontSize: '14@ms0.3',
-        fontWeight: 'bold',
-        color: Themes.COLORS.black,
+        color: Themes.COLORS.textSecondary,
+        fontWeight: '600',
+        fontSize: 18,
     },
     required: {
         fontSize: '14@ms0.3',
@@ -170,11 +172,18 @@ const styles = ScaledSheet.create({
     },
     optionsSelected: {
         flexDirection: 'row',
-        height: '45@s',
-        borderRadius: '2@s',
-        borderWidth: 1,
-        borderColor: Themes.COLORS.grayD1,
-        alignItems: 'center',
+        borderRadius: '6@s',
+        paddingVertical: '12@s',
+        backgroundColor: Themes.COLORS.white,
+        color: Themes.COLORS.black,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.34,
+        shadowRadius: 6.27,
+        elevation: 10,
     },
     icon: {
         marginHorizontal: '18@s',
@@ -197,9 +206,8 @@ const styles = ScaledSheet.create({
         borderRadius: '3@s',
     },
     selectedText: {
-        fontSize: '14@ms0.3',
         fontWeight: 'bold',
-        color: Themes.COLORS.black,
+        color: Themes.COLORS.blue,
         marginRight: '10@s',
     },
     removeWrapper: {

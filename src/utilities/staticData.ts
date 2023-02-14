@@ -12,22 +12,95 @@ export const dataRoom = [
     {
         id: 1,
         name: 'Phòng 1',
+        status: 'Đã thuê',
+        date: '01/10/2023',
+        collectionDate: '1/10/2023',
+        price: '1.000.000 VNĐ',
     },
     {
         id: 2,
         name: 'Phòng 2',
+        status: 'Đã thuê',
+        date: '01/10/2023',
+        collectionDate: '1/10/2023',
+        price: '1.000.000 VNĐ',
     },
     {
         id: 3,
         name: 'Phòng 3',
+        status: 'Đã thuê',
+        date: '01/10/2023',
+        collectionDate: '1/10/2023',
+        price: '1.000.000 VNĐ',
     },
     {
         id: 4,
         name: 'Phòng 4',
+        status: 'Trống',
+        date: '01/10/2023',
+        collectionDate: '1/10/2023',
+        price: '1.000.000 VNĐ',
     },
     {
         id: 5,
         name: 'Phòng 5',
+        status: 'Trống',
+        date: '01/10/2023',
+        collectionDate: '1/10/2023',
+        price: '1.000.000 VNĐ',
+    },
+];
+
+export const dataRoomer = [
+    {
+        id: 1,
+        name: 'Phòng 1',
+        status: true,
+        userName: 'Trần Tuấn Vũ',
+        cccd: '322323232323',
+        phone: '09232323232',
+        address: 'Ha noi',
+    },
+    {
+        id: 2,
+        name: 'Phòng 2',
+        status: true,
+        userName: 'Trần Tuấn Vũ',
+        cccd: '322323232323',
+        phone: '09232323232',
+        address: 'Ha noi',
+    },
+    {
+        id: 3,
+        name: 'Phòng 3',
+        status: false,
+        userName: '',
+        cccd: '',
+        phone: '',
+        address: '',
+    },
+];
+
+export const dataBill = [
+    {
+        id: 1,
+        name: 'Phòng 1',
+        status: true,
+        userName: 'Trần Tuấn Vũ',
+        water: '10',
+        electric: '100',
+        price: '1.000.000',
+        date: '10/10/2022',
+    },
+    {
+        id: 2,
+        name: 'Phòng 2',
+        status: false,
+        userName: 'Trần Tuấn Vũ',
+        water: '10',
+        electric: '100',
+        price: '1.000.000',
+        date: '10/10/2022',
     },
 ];
 

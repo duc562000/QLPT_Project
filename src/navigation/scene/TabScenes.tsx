@@ -1,6 +1,6 @@
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import EditRoomScreen from 'feature/home/EditRoomScreen';
+import EditRoomScreen from 'feature/home/Room/EditRoomScreen';
 // import Images from 'assets/images';
 // import AccountScreen from 'feature/account/AccountScreen';
 import HomeDataScreen from 'feature/home/HomeDataScreen';
@@ -8,13 +8,19 @@ import HomeDetailScreen from 'feature/home/HomeDetailScreen';
 // Screen
 import HomeScreen from 'feature/home/HomeScreen';
 import HomeUserListScreen from 'feature/home/HomeUserListScreen';
-import ManagerScreen from 'feature/home/ManagerScreen';
+import ManagerScreen from 'feature/home/Room/ManagerScreen';
 // import NotificationScreen from 'feature/notification/NotificationScreen';
 // import SettingView from 'feature/setting/SettingScreen';
 import StyledTabBar from 'navigation/components/StyledTabBar';
 import navigationConfigs, { tabScreenOptions } from 'navigation/config/options';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import React from 'react';
+import AddRoomScreen from 'feature/home/Room/AddRoomScreen';
+import MangerRoommer from 'feature/home/Rommer/MangerRoommer';
+import EditRoomer from 'feature/home/Rommer/EditRoomer';
+import ManagerBill from 'feature/home/Bill/ManagerBill';
+import EditBill from 'feature/home/Bill/EditBill';
+import SettingScreen from 'feature/home/Settting/SettingScreen';
 // import { useTranslation } from 'react-i18next';
 
 const MainStack = createStackNavigator();
@@ -26,7 +32,12 @@ const HomeStack = () => (
         <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.HOME_DETAIL} component={HomeDetailScreen} />
         <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_SCREEN} component={ManagerScreen} />
         <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ROOM_SCREEN} component={EditRoomScreen} />
-
+        <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.ADD_ROOM_SCREEN} component={AddRoomScreen} />
+        <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_ROOMER_SCREEN} component={MangerRoommer} />
+        <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ROOMER_SCREEN} component={EditRoomer} />
+        <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_BILL_SCREEN} component={ManagerBill} />
+        <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_BILL_SCREEN} component={EditBill} />
+        <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.SETTING_SCREEN} component={SettingScreen} />
         <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.WEB_VIEW} component={HomeDetailScreen} />
         <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.HOME_DATA} component={HomeDataScreen} />
         <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.HOME_USER_LIST} component={HomeUserListScreen} />
