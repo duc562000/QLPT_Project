@@ -2,7 +2,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import AlertMessage from 'components/base/AlertMessage';
 import i18next from 'i18next';
-import { DevSettings, Platform } from 'react-native';
+import { DevSettings, Insets, Platform } from 'react-native';
 import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import codePush from 'react-native-code-push';
@@ -28,6 +28,10 @@ export function logger(msg: any, isWarning?: boolean, params?: any): void {
         else console.warn(msg);
     }
 }
+export const hitSlopTouchable = (value: number): Insets => {
+    const insets: Insets = { top: value, bottom: value, left: value, right: value };
+    return insets;
+};
 
 export function initPicker(params?: any) {
     Picker.init({

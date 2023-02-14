@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import { StyleProp, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import { Themes } from 'assets/themes';
 import { StyledText, StyledTouchable } from '.';
 
 interface StyledButtonProps {
@@ -21,7 +20,7 @@ const StyledButton: FunctionComponent<StyledButtonProps> = (props: StyledButtonP
             onLongPress={onLongPress}
             disabled={disabled}
         >
-            <StyledText i18nText={title} customStyle={customStyleText} />
+            <StyledText originValue={title} customStyle={customStyleText} />
         </StyledTouchable>
     );
 };
@@ -29,13 +28,12 @@ const StyledButton: FunctionComponent<StyledButtonProps> = (props: StyledButtonP
 const styles = StyleSheet.create({
     container: {
         paddingVertical: 10,
-        width: 128,
-        borderColor: Themes.COLORS.primary,
+        width: '76%',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10,
-        borderWidth: 1,
-        marginTop: 10,
+        borderRadius: 22,
+        backgroundColor: '#29B6F6',
+        marginTop: 30,
     },
 });
 

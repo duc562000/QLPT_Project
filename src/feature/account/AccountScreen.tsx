@@ -87,7 +87,8 @@ const AccountScreen = () => {
                 keyboardShouldPersistTaps="handled"
                 enableOnAndroid={true}
                 showsVerticalScrollIndicator={false}
-                enableResetScrollToCoords={false}>
+                enableResetScrollToCoords={false}
+            >
                 <FormProvider {...form}>
                     <StyledInputForm name={'username'} label="Username" returnKeyType="next" />
                     <StyledInputForm name={'email'} label="Email" />

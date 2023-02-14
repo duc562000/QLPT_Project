@@ -1,90 +1,108 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { checkIsExistEmail, getVerifyCode } from 'api/modules/api-app/authenticate';
-import { StyledButton } from 'components/base';
-import AlertMessage from 'components/base/AlertMessage';
-import StyledInputForm from 'components/base/StyledInputForm';
-import { AUTHENTICATE_ROUTE } from 'navigation/config/routes';
-import { navigate } from 'navigation/NavigationService';
+
+import { Themes } from 'assets/themes';
+import { StyledButton, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
+import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
+import { goBack } from 'navigation/NavigationService';
 import React, { FunctionComponent, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useLogin } from 'utilities/authenticate/AuthenticateService';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
-const RegisterScreen: FunctionComponent = () => {
-    const { t } = useTranslation();
-    const passwordRef = useRef<any>(null);
-    const passwordConfirmRef = useRef<any>(null);
+const DEFAULT_FORM: any = {
+    email: 'hoan.nguyen@amela.vns',
+    password: '123123123',
+};
 
-    const registerSchema = yup.object().shape({
+const RegisterScreen: FunctionComponent = () => {
+    const passwordRef = useRef<any>(null);
+    const {
+        // requestLogin,
+        loading,
+    } = useLogin();
+
+    const yupSchema = yup.object().shape({
         email: yupValidate.email(),
         password: yupValidate.password(),
-        confirmPassword: yupValidate.password('password'),
     });
-
     const form = useForm({
-        mode: 'onChange',
-        resolver: yupResolver(registerSchema),
+        mode: 'onChange', // validate form onChange
+        defaultValues: DEFAULT_FORM,
+        resolver: yupResolver(yupSchema),
+        reValidateMode: 'onChange',
+        criteriaMode: 'firstError', // first error from each field will be gathered.
     });
     const {
         formState: { isValid },
-        handleSubmit,
     } = form;
 
-    const submit = async (user: any) => {
-        const res = await checkIsExistEmail(user?.email);
-        if (res?.data?.isExisted) {
-            AlertMessage(t('error.emailExisted'));
-            return;
-        }
-        await getVerifyCode(user?.email);
-        navigate(AUTHENTICATE_ROUTE.SEND_OTP, { ...user, register: true });
+    const doLogin = () => {
+        goBack();
     };
 
     return (
         <KeyboardAwareScrollView
             contentContainerStyle={styles.container}
-            enableOnAndroid={true}
+            keyboardShouldPersistTaps="handled"
+            // enableOnAndroid={true}
             showsVerticalScrollIndicator={false}
+            enableResetScrollToCoords={false}
         >
-            <SafeAreaView style={styles.body}>
+            <StyledOverlayLoading visible={loading} />
+            <View style={styles.body}>
+                <StyledText customStyle={styles.textLogin} originValue="Đăng ký" />
                 <FormProvider {...form}>
                     <StyledInputForm
-                        name={'email'}
-                        placeholder={t('authen.register.emailPlaceholder')}
-                        keyboardType="email-address"
-                        returnKeyType={'next'}
-                        onSubmitEditing={() => passwordRef.current.focus()}
+                        name="email"
+                        customPlaceHolder="Email"
+                        returnKeyType="done"
+                        maxLength={20}
+                        label="Email"
                     />
                     <StyledInputForm
-                        name={'password'}
-                        placeholder={t('authen.register.passwordPlaceholder')}
+                        name="Username"
+                        customPlaceHolder="Họ và Tên"
+                        returnKeyType="done"
+                        maxLength={20}
+                        label="Email"
+                    />
+                    <StyledInputForm
+                        name="password"
+                        customPlaceHolder="Mật khẩu"
                         ref={passwordRef}
-                        secureTextEntry={true}
-                        returnKeyType={'next'}
-                        maxLength={32}
-                        onSubmitEditing={() => passwordConfirmRef.current.focus()}
+                        secureTextEntry
+                        returnKeyType="done"
+                        maxLength={20}
+                        label="Mật khẩu"
                     />
                     <StyledInputForm
-                        name={'confirmPassword'}
-                        placeholder={t('authen.register.passwordPlaceholder')}
-                        ref={passwordConfirmRef}
-                        secureTextEntry={true}
-                        returnKeyType={'next'}
-                        maxLength={32}
-                        onSubmitEditing={handleSubmit(submit)}
+                        name="confirmPassword"
+                        customPlaceHolder="Nhập lại mật khẩu"
+                        ref={passwordRef}
+                        secureTextEntry
+                        returnKeyType="done"
+                        maxLength={20}
+                        label="Nhập lại mật khẩu"
                     />
                 </FormProvider>
 
                 <StyledButton
-                    onPress={handleSubmit(submit)}
-                    title={'Confirm'}
-                    customStyle={[styles.loginButton, !isValid && { backgroundColor: 'lightgray' }]}
+                    // onPress={handleSubmit(requestLogin)}
+                    onPress={() => console.log('dang ky')}
+                    title="Đăng ký"
                     disabled={!isValid}
+                    customStyleText={styles.textButton}
                 />
-            </SafeAreaView>
+                <View style={styles.viewFooter}>
+                    <StyledText customStyle={styles.text1} originValue="Đã có tài khoản?" />
+                    <StyledTouchable onPress={doLogin} customStyle={styles.registerButton}>
+                        <StyledText customStyle={styles.text2} originValue="Đăng nhập" />
+                    </StyledTouchable>
+                </View>
+            </View>
         </KeyboardAwareScrollView>
     );
 };
@@ -97,12 +115,42 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: Themes.COLORS.secondary,
     },
     loginButton: {
         marginTop: 20,
+        borderWidth: 0,
     },
-    registerButton: {
-        marginTop: 20,
+    registerButton: {},
+    errorMessage: {
+        color: Themes.COLORS.borderInputError,
+    },
+    textLogin: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: Themes.COLORS.colorText,
+        paddingBottom: 20,
+    },
+    textButton: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: Themes.COLORS.white,
+    },
+    viewFooter: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: 14,
+    },
+    text1: {
+        color: '#616161',
+        fontSize: 16,
+        paddingRight: 20,
+        fontWeight: '600',
+    },
+    text2: {
+        color: '#29B6F6',
+        fontWeight: '600',
     },
 });
+
 export default RegisterScreen;

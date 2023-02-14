@@ -1,7 +1,7 @@
+import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import React, { forwardRef, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
     ColorValue,
     ReturnKeyTypeOptions,
@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { AutoCompleteType, TextContentType } from 'utilities/CommonInterface';
+import { hitSlopTouchable } from 'utilities/helper';
+import StyledIcon from './StyledIcon';
 import StyledText, { I18Type } from './StyledText';
 import StyledTouchable from './StyledTouchable';
 
@@ -23,7 +25,7 @@ export interface StyledInputProps extends TextInputProps {
     customStyle?: StyleProp<TextStyle>;
     customLabelStyle?: StyleProp<TextStyle>;
     customErrorStyle?: StyleProp<TextStyle>;
-    customPlaceHolder?: I18Type;
+    customPlaceHolder?: any;
     placeholderTextColor?: ColorValue;
     customUnderlineColor?: ColorValue;
     customReturnKeyType?: ReturnKeyTypeOptions;
@@ -49,8 +51,6 @@ const WrapInputComponent = ({ onPress, children, customStyle }: any) => {
 const StyledInput = (props: StyledInputProps, ref: any) => {
     const [isFocused, setIsFocused] = useState(false);
     const input = useRef<TextInput>(null);
-    const { t } = useTranslation();
-
     const {
         containerStyle,
         label,
@@ -61,15 +61,20 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
         renderRight,
         errorMessage,
         customErrorStyle,
-        placeholderTextColor = Themes.COLORS.grey,
+        placeholderTextColor = Themes.COLORS.grayC4,
         customUnderlineColor = 'transparent',
         autoCompleteType = 'off',
         textContentType = 'none',
         wrapInputStyle,
+        secureTextEntry,
         onPress,
         ...otherProps
     } = props;
+    const [isShow, setIsShow] = useState(secureTextEntry);
 
+    const onTogglePass = () => {
+        setIsShow(!isShow);
+    };
     return (
         <View style={[styles.container, containerStyle]}>
             {!!label && <StyledText customStyle={[styles.label, customLabelStyle]} i18nText={label as I18Type} />}
@@ -78,7 +83,8 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                     wrapInputStyle,
                     !isFocused && !!errorMessage && { borderColor: Themes.COLORS.borderInputError },
                 ]}
-                onPress={onPress}>
+                onPress={onPress}
+            >
                 <TextInput
                     ref={ref || input}
                     onFocus={() => setIsFocused(true)}
@@ -89,17 +95,28 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
                         !isFocused && !!errorMessage && { borderColor: Themes.COLORS.borderInputError },
                     ]}
                     placeholderTextColor={placeholderTextColor}
-                    placeholder={customPlaceHolder ? t(customPlaceHolder) : ''}
+                    placeholder={customPlaceHolder || ''}
                     underlineColorAndroid={customUnderlineColor}
                     autoCompleteType={autoCompleteType}
                     textContentType={textContentType}
                     importantForAutofill="yes"
                     autoCorrect={false}
+                    secureTextEntry={isShow}
                     returnKeyType={customReturnKeyType}
                     blurOnSubmit={!!customReturnKeyType}
                     {...otherProps}
                 />
+
                 {!!renderRight && <View style={styles.rightView}>{renderRight?.()}</View>}
+                {secureTextEntry && (
+                    <StyledTouchable
+                        onPress={onTogglePass}
+                        customStyle={styles.styleIcon}
+                        hitSlop={hitSlopTouchable(5)}
+                    >
+                        <StyledIcon source={isShow ? Images.icons.eyeOff : Images.icons.eye} size={20} />
+                    </StyledTouchable>
+                )}
             </WrapInputComponent>
             {!!errorMessage && (
                 <StyledText i18nText={errorMessage as I18Type} customStyle={[styles.errorMessage, customErrorStyle]} />
@@ -110,9 +127,18 @@ const StyledInput = (props: StyledInputProps, ref: any) => {
 const styles = ScaledSheet.create({
     textInput: {
         width: Metrics.screenWidth * 0.8,
-        borderRadius: '5@s',
+        borderRadius: '6@s',
         padding: '10@s',
-        backgroundColor: Themes.COLORS.secondary,
+        backgroundColor: Themes.COLORS.white,
+        color: Themes.COLORS.black,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.34,
+        shadowRadius: 6.27,
+        elevation: 10,
     },
     errorMessage: {
         fontSize: '12@ms',
@@ -123,13 +149,26 @@ const styles = ScaledSheet.create({
         width: Metrics.screenWidth * 0.8,
         marginTop: '15@s',
     },
-    label: {},
+    label: {
+        paddingBottom: '6@vs',
+        color: Themes.COLORS.textSecondary,
+        fontWeight: '600',
+        fontSize: 18,
+    },
     rightView: {
         position: 'absolute',
         right: '10@s',
         height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    styleIcon: {
+        position: 'absolute',
+        height: 'auto',
+        flexDirection: 'row',
+        alignSelf: 'center',
+        right: '10@s',
+        bottom: '30%',
     },
 });
 export default forwardRef(StyledInput);

@@ -19,6 +19,11 @@ const Images = {
             check: require('./icon/ic_check_square.png'),
             uncheck: require('./icon/ic_uncheck_square.png'),
         },
+        eyeOff: require('./icon/ic_eye_off.png'),
+        eye: require('./icon/ic_eye.png'),
+        up: require('./icon/ic_up.png'),
+        down: require('./icon/ic_down.png'),
+        remove: require('./icon/ic_remove.png'),
     },
     photo: {
         defaultImage: require('./photo/img_default_image.png'),

@@ -13,12 +13,16 @@ const Light = {
     COLORS: {
         ...common,
         primary: '#4287f5',
-        secondary: '#E9ECEF',
+        secondary: '#BDE4F4',
         textPrimary: '#000000',
-        textSecondary: '#607d8b',
+        textSecondary: '#475372',
         backgroundModalUpdate: '#323232',
         backdropModalUpdate: '#00000071',
         progressUpdateColor: '#28A696',
+        colorText: '#404969',
+        grayC4: '#C4C4C4',
+        grayD1: '#DEDDE1',
+        backgroundTab: '#F0EFF1',
     },
     FONTS: {
         defaultFont: 'Montserrat-Regular',

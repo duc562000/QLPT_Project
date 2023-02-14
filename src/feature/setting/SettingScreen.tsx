@@ -2,13 +2,17 @@ import React, { FunctionComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import StyledText from 'components/base/StyledText';
 import { StyledButton } from 'components/base';
-import AuthenticateService from 'utilities/authenticate/AuthenticateService';
+import { userInfoActions } from 'app-redux/slices/userInfoSlice';
+import { store } from 'app-redux/store';
 
 const SettingView: FunctionComponent = () => {
     return (
         <View style={styles.container}>
             <StyledText originValue={'Setting'} />
-            <StyledButton onPress={AuthenticateService.logOut} title={'Log out'} />
+            <StyledButton
+                onPress={() => store.dispatch(userInfoActions.updateToken({ token: '', refreshToken: '' }))}
+                title={'Log out'}
+            />
         </View>
     );
 };

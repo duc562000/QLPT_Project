@@ -8,6 +8,29 @@ export const ERRORS = {
     network: 'common.error.network',
 };
 
+export const dataRoom = [
+    {
+        id: 1,
+        name: 'Phòng 1',
+    },
+    {
+        id: 2,
+        name: 'Phòng 2',
+    },
+    {
+        id: 3,
+        name: 'Phòng 3',
+    },
+    {
+        id: 4,
+        name: 'Phòng 4',
+    },
+    {
+        id: 5,
+        name: 'Phòng 5',
+    },
+];
+
 export const dataPicker = [
     'label1',
     'label2',
