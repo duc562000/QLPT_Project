@@ -17,7 +17,7 @@ const ManagerScreen: FunctionComponent = () => {
     );
     return (
         <View style={styles.container}>
-            <StyledHeader isBack title={'Home Detail'} />
+            <StyledHeader isBack title={'Home Details'} />
             <View style={styles.body}>
                 <StyledList numColumns={3} data={dataRoom} renderItem={renderItem} />
             </View>
