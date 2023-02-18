@@ -16,7 +16,7 @@ export const toLocalStringTime = (date: Date): string => {
 };
 
 export const requireField = (field: string) => {
-    return i18next.t('error.require', { field }) || '';
+    return i18next.t('Trường này bắt buộc nhập', { field }) || '';
 };
 
 export const formatDate = (date: Date | string | number, defaultFormat = YYYYMMDD) => {

@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 
 export interface TypeLoginRequest extends AxiosRequestConfig {
-    username: string;
+    email: string;
     password: string;
 }
 

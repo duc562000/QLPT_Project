@@ -1,7 +1,14 @@
 import i18next from 'i18next';
 import { Alert } from 'react-native';
 
-const AlertMessage = (message: string, title?: string, onPressOk?: any, cancel?: boolean, checkNetworkError = true) => {
+const AlertMessage = (
+    message: string,
+    title?: string,
+    textConfirm?: string,
+    onPressOk?: any,
+    cancel?: boolean,
+    checkNetworkError = true,
+) => {
     if (!(checkNetworkError && message === i18next.t('common.error.network'))) {
         Alert.alert(
             title || '',
@@ -13,7 +20,7 @@ const AlertMessage = (message: string, title?: string, onPressOk?: any, cancel?:
                           style: 'default',
                       },
                       {
-                          text: i18next.t('common.confirm'),
+                          text: i18next.t('common.confirms'),
                           onPress: () => {
                               if (typeof onPressOk === 'function') {
                                   onPressOk();
@@ -24,7 +31,7 @@ const AlertMessage = (message: string, title?: string, onPressOk?: any, cancel?:
                   ]
                 : [
                       {
-                          text: i18next.t('common.confirm'),
+                          text: textConfirm || i18next.t('ok'),
                           onPress: () => {
                               if (typeof onPressOk === 'function') {
                                   onPressOk();

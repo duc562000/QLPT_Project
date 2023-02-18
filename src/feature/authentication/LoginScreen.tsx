@@ -1,6 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { userInfoActions } from 'app-redux/slices/userInfoSlice';
-import { store } from 'app-redux/store';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
@@ -15,21 +13,18 @@ import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 
 const DEFAULT_FORM: any = {
-    email: 'hoan.nguyen@amela.vns',
-    password: '123123123',
+    email: 'duc@gmail.com',
+    password: '123456',
 };
 
 const LoginScreen: FunctionComponent = () => {
     const passwordRef = useRef<any>(null);
-    const {
-        // requestLogin,
-        loading,
-    } = useLogin();
-
+    const { requestLogin, loading } = useLogin();
     const yupSchema = yup.object().shape({
         email: yupValidate.email(),
         password: yupValidate.password(),
     });
+
     const form = useForm({
         mode: 'onChange', // validate form onChange
         defaultValues: DEFAULT_FORM,
@@ -39,6 +34,7 @@ const LoginScreen: FunctionComponent = () => {
     });
     const {
         formState: { isValid },
+        handleSubmit,
     } = form;
 
     const doRegister = () => {
@@ -77,10 +73,8 @@ const LoginScreen: FunctionComponent = () => {
                 </FormProvider>
 
                 <StyledButton
-                    // onPress={handleSubmit(requestLogin)}
-                    onPress={() =>
-                        store.dispatch(userInfoActions.updateToken({ token: 'dsdsd', refreshToken: 'sdsd' }))
-                    }
+                    onPress={handleSubmit(requestLogin)}
+                    // onPress={() => store.dispatch(userInfoActions.updateToken({ token: 'dsdsd' }))}
                     title="Đăng nhập"
                     disabled={!isValid}
                     customStyleText={styles.textButton}

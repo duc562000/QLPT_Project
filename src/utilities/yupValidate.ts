@@ -17,16 +17,16 @@ const yupValidate = {
             .string()
             .required(() => requireField('name'))
             .trim(i18next.t('error.trimSpace'))
-            .strict(true)
-            .min(USERNAME_MIN_LENGTH, i18next.t('error.nameLength'))
-            .max(USERNAME_MAX_LENGTH, i18next.t('error.nameLength')),
+            .strict(true),
+    // .min(USERNAME_MIN_LENGTH, i18next.t('error.nameLength'))
+    // .max(USERNAME_MAX_LENGTH, i18next.t('error.nameLength')),
 
     email: () =>
         yup
             .string()
             .required(() => requireField('email'))
-            .email(i18next.t('error.emailInvalid'))
-            .matches(REGEX_EMAIL, i18next.t('error.emailInvalid')),
+            .email('Email không hợp lệ')
+            .matches(REGEX_EMAIL, i18next.t('Sai định dạng')),
 
     phone: () =>
         yup
@@ -52,17 +52,17 @@ const yupValidate = {
             return yup
                 .string()
                 .required(() => requireField('passwordConfirm'))
-                .oneOf([yup.ref(ref), null], i18next.t('error.passwordNotMatch'));
+                .oneOf([yup.ref(ref), null], i18next.t('Mật khẩu không khớp'));
         }
 
         return yup
             .string()
             .required(() => requireField('password'))
             .trim(i18next.t('error.trimSpace'))
-            .strict(true)
-            .min(PASSWORD_MIN_LENGTH, i18next.t('error.passwordLength'))
-            .max(PASSWORD_MAX_LENGTH, i18next.t('error.passwordLength'))
-            .matches(REGEX_PASSWORD, i18next.t('error.validatePassword'));
+            .strict(true);
+        // .min(PASSWORD_MIN_LENGTH, i18next.t('error.passwordLength'))
+        // .max(PASSWORD_MAX_LENGTH, i18next.t('error.passwordLength'))
+        // .matches(REGEX_PASSWORD, i18next.t('error.validatePassword'));
     },
     birthday: () => yup.string().required(() => requireField('birthday')),
     labelPicker: () => yup.string().required(() => requireField('labelPicker')),

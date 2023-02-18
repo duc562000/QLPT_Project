@@ -1,12 +1,12 @@
 import { TypeLoginRequest } from 'api/interface/authenticate';
-import { login } from 'api/modules/api-app/authenticate';
 import request from 'api/request';
 import { userInfoActions } from 'app-redux/slices/userInfoSlice';
 import { store } from 'app-redux/store';
 import AlertMessage from 'components/base/AlertMessage';
 import { useState } from 'react';
-import { logger } from 'utilities/helper';
 import { deleteTagOneSignal, pushTagMember } from 'utilities/notification';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const AUTH_URL_REFRESH_TOKEN = '/refreshToken';
 
@@ -41,12 +41,16 @@ export const useLogin = (): LoginRequest => {
     const requestLogin = async (options: TypeLoginRequest) => {
         try {
             setLoading(true);
-            const response = await login(options);
-            store.dispatch(userInfoActions.getUserInfoRequest(response?.data?.token));
-            AuthenticateService.handlerLogin({ ...response.data });
-        } catch (e) {
-            AlertMessage(String(e));
-            logger(e);
+            await auth().signInWithEmailAndPassword(options?.email, options?.password);
+            const res = await firestore().collection('Users').doc(auth().currentUser?.uid).get();
+            store.dispatch(userInfoActions.getUserInfoRequest(res?._data.token));
+            AuthenticateService.handlerLogin({ token: res?._data?.token });
+        } catch (e: any) {
+            if (e?.code === 'auth/user-not-found') {
+                AlertMessage('Tài khoản hoặc mật khẩu chưa chính xác');
+            } else {
+                AlertMessage(String(e));
+            }
         } finally {
             setLoading(false);
         }

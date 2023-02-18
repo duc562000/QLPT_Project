@@ -1,32 +1,48 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledInputForm, StyledText, StyledTouchable } from 'components/base';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import { goBack } from 'navigation/NavigationService';
-import React, { FunctionComponent, useRef } from 'react';
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useLogin } from 'utilities/authenticate/AuthenticateService';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import AlertMessage from 'components/base/AlertMessage';
 
 const DEFAULT_FORM: any = {
     email: 'hoan.nguyen@amela.vns',
     password: '123123123',
+    confirmPassword: '123123123',
+    name: 'Duc',
 };
-
+let token = '';
 const RegisterScreen: FunctionComponent = () => {
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        getFcmtToken();
+    }, []);
+    const getFcmtToken = async () => {
+        auth().onAuthStateChanged(user => {
+            user?.getIdToken(true).then((tokenRes: string) => {
+                token = tokenRes;
+            });
+        });
+    };
     const passwordRef = useRef<any>(null);
-    const {
-        // requestLogin,
-        loading,
-    } = useLogin();
+    const passwordConfirmRef = useRef<any>(null);
 
     const yupSchema = yup.object().shape({
         email: yupValidate.email(),
         password: yupValidate.password(),
+        confirmPassword: yupValidate.password('password'),
+        name: yupValidate.name(),
     });
     const form = useForm({
         mode: 'onChange', // validate form onChange
@@ -37,8 +53,39 @@ const RegisterScreen: FunctionComponent = () => {
     });
     const {
         formState: { isValid },
+        handleSubmit,
     } = form;
+    const requestRegister = async (formData: any) => {
+        try {
+            setLoading(true);
 
+            await auth().createUserWithEmailAndPassword(formData?.email, formData?.password);
+
+            await firestore()
+                .collection('Users')
+                .doc(auth().currentUser?.uid)
+                .set({
+                    email: String(formData?.email),
+                    name: String(formData?.name),
+                    token,
+                });
+            AlertMessage('Đăng ký tài khoản thành công !', undefined, 'Đăng nhập ngay', () => goBack());
+        } catch (error: any) {
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    AlertMessage('Email đã được sử dụng!');
+                    break;
+                case 'auth/invalid-email':
+                    AlertMessage('Email hoặc mật khẩu không hợp lệ!');
+                    break;
+                default:
+                    AlertMessage(error.code);
+                    break;
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
     const doLogin = () => {
         goBack();
     };
@@ -55,19 +102,13 @@ const RegisterScreen: FunctionComponent = () => {
             <View style={styles.body}>
                 <StyledText customStyle={styles.textLogin} originValue="Đăng ký" />
                 <FormProvider {...form}>
+                    <StyledInputForm name="email" customPlaceHolder="Email" returnKeyType="done" label="Email" />
                     <StyledInputForm
-                        name="email"
-                        customPlaceHolder="Email"
-                        returnKeyType="done"
-                        maxLength={20}
-                        label="Email"
-                    />
-                    <StyledInputForm
-                        name="Username"
+                        name="name"
                         customPlaceHolder="Họ và Tên"
                         returnKeyType="done"
                         maxLength={20}
-                        label="Email"
+                        label="Họ và Tên"
                     />
                     <StyledInputForm
                         name="password"
@@ -81,7 +122,7 @@ const RegisterScreen: FunctionComponent = () => {
                     <StyledInputForm
                         name="confirmPassword"
                         customPlaceHolder="Nhập lại mật khẩu"
-                        ref={passwordRef}
+                        ref={passwordConfirmRef}
                         secureTextEntry
                         returnKeyType="done"
                         maxLength={20}
@@ -90,8 +131,7 @@ const RegisterScreen: FunctionComponent = () => {
                 </FormProvider>
 
                 <StyledButton
-                    // onPress={handleSubmit(requestLogin)}
-                    onPress={() => console.log('dang ky')}
+                    onPress={handleSubmit(requestRegister)}
                     title="Đăng ký"
                     disabled={!isValid}
                     customStyleText={styles.textButton}
