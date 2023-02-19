@@ -32,6 +32,7 @@ const AppStack = () => (
             <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.ADD_ROOM_SCREEN} component={AddRoomScreen} />
             <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_ROOMER_SCREEN} component={MangerRoommer} />
             <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ROOMER_SCREEN} component={EditRoomer} />
+            <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.DETAIL_ROOM_SCREEN} component={EditRoomScreen} />
             <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_BILL_SCREEN} component={ManagerBill} />
             <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_BILL_SCREEN} component={EditBill} />
             <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.SETTING_SCREEN} component={SettingScreen} />

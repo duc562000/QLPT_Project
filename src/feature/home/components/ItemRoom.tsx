@@ -1,12 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { StyledTouchable, StyledText } from 'components/base';
+import { Themes } from 'assets/themes';
 
 const ItemRoom: FunctionComponent = (props: any) => {
     const { onPress, roomName, item, isStatus, isPay } = props;
     return (
         <StyledTouchable onPress={onPress} customStyle={styles.viewButton}>
-            <StyledText originValue={roomName} />
+            <StyledText customStyle={{ color: Themes.COLORS.white }} originValue={`Phòng ${roomName || ''}`} />
             {isStatus && (
                 <StyledText
                     customStyle={styles.textDescription}

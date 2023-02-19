@@ -16,11 +16,11 @@ import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import Images from 'assets/images';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
-import { formatMoney, formatToVND } from 'utilities/format';
 import AlertMessage from 'components/base/AlertMessage';
 
 const SettingScreen: FunctionComponent = (props: any) => {
     const { dataParams, callBack } = props?.route?.params || {};
+    const apiUser = firestore().collection('Users');
     useEffect(() => {
         if (!dataParams) {
             getUser();
@@ -31,7 +31,7 @@ const SettingScreen: FunctionComponent = (props: any) => {
     const getUser = async () => {
         try {
             setLoading(true);
-            const res = await firestore().collection('Users').doc(auth().currentUser?.uid).get();
+            const res = await apiUser.doc(auth().currentUser?.uid).get();
             setDataUser(res?._data);
         } catch (error) {
             AlertMessage(String(error));
@@ -104,7 +104,7 @@ const SettingScreen: FunctionComponent = (props: any) => {
                                 customPlaceHolder="Giá nước"
                                 label="Giá nước:"
                                 keyboardType="number-pad"
-                                defaultValue={String(dataParams?.waterPrice)}
+                                defaultValue={String(dataParams?.waterPrice || '')}
                             />
                             <StyledInputForm
                                 customStyle={styles.input}
@@ -112,7 +112,7 @@ const SettingScreen: FunctionComponent = (props: any) => {
                                 customPlaceHolder="Giá điện"
                                 label="Giá điện:"
                                 keyboardType="number-pad"
-                                defaultValue={String(dataParams?.electricityPrice)}
+                                defaultValue={String(dataParams?.electricityPrice || '')}
                             />
                         </FormProvider>
                     ) : (

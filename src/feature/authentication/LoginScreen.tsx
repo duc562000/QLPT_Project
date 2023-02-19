@@ -23,7 +23,7 @@ const LoginScreen: FunctionComponent = () => {
     const { requestLogin, loading } = useLogin();
     const yupSchema = yup.object().shape({
         email: yupValidate.email(),
-        password: yupValidate.password(),
+        password: yupValidate.requireField(),
     });
     const form = useForm({
         mode: 'onChange', // validate form onChange
