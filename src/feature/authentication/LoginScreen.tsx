@@ -10,11 +10,12 @@ import { StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useLogin } from 'utilities/authenticate/AuthenticateService';
 import yupValidate from 'utilities/yupValidate';
+
 import * as yup from 'yup';
 
 const DEFAULT_FORM: any = {
-    email: 'duc@gmail.com',
-    password: '123456',
+    email: 'duc@gmail.com.vn',
+    password: '123123123',
 };
 
 const LoginScreen: FunctionComponent = () => {
@@ -24,7 +25,6 @@ const LoginScreen: FunctionComponent = () => {
         email: yupValidate.email(),
         password: yupValidate.password(),
     });
-
     const form = useForm({
         mode: 'onChange', // validate form onChange
         defaultValues: DEFAULT_FORM,
@@ -57,9 +57,9 @@ const LoginScreen: FunctionComponent = () => {
                         name="email"
                         customPlaceHolder="Email"
                         keyboardType="email-address"
-                        maxLength={32}
                         onSubmitEditing={() => passwordRef.current.focus()}
                         label="Email"
+                        customLabelStyle={{ paddingLeft: 0 }}
                     />
                     <StyledInputForm
                         name="password"
@@ -67,8 +67,8 @@ const LoginScreen: FunctionComponent = () => {
                         ref={passwordRef}
                         secureTextEntry
                         returnKeyType="done"
-                        maxLength={20}
                         label="Mật khẩu"
+                        customLabelStyle={{ paddingLeft: 0 }}
                     />
                 </FormProvider>
 

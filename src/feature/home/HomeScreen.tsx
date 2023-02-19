@@ -1,16 +1,13 @@
-import { userInfoActions } from 'app-redux/slices/userInfoSlice';
-import { store } from 'app-redux/store';
 import { StyledText, StyledTouchable } from 'components/base';
-import StyledHeader from 'components/common/StyledHeader';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { FunctionComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
+import AuthenticateService from 'utilities/authenticate/AuthenticateService';
 
 const HomeScreen: FunctionComponent = () => {
     return (
-        <View style={{ flex: 1 }}>
-            <StyledHeader title={'Trang chủ'} isBack={false} />
+        <View style={{ flex: 1, justifyContent: 'center' }}>
             <View style={styles.body}>
                 <StyledTouchable
                     onPress={() =>
@@ -53,10 +50,7 @@ const HomeScreen: FunctionComponent = () => {
                 >
                     <StyledText customStyle={styles.textButton} originValue="Quản lý cài đặt" />
                 </StyledTouchable>
-                <StyledTouchable
-                    onPress={() => store.dispatch(userInfoActions.updateToken({ token: '', refreshToken: '' }))}
-                    customStyle={styles.buttonNavigate}
-                >
+                <StyledTouchable onPress={AuthenticateService.logOut} customStyle={styles.buttonNavigate}>
                     <StyledText customStyle={styles.textButton} originValue="Đăng xuất" />
                 </StyledTouchable>
             </View>

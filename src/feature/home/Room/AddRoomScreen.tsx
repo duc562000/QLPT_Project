@@ -5,7 +5,6 @@ import StyledHeader from 'components/common/StyledHeader';
 import StyledDropdown from 'components/base/StyledDropdown';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
-import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 import { StyledInputForm, StyledText, StyledTouchable } from 'components/base';
 import Metrics from 'assets/metrics';

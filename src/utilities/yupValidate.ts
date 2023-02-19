@@ -32,8 +32,8 @@ const yupValidate = {
         yup
             .string()
             .required(() => requireField('phone'))
-            .matches(REGEX_PHONE, i18next.t('error.phoneInvalid')),
-
+            .matches(REGEX_PHONE, i18next.t('Số điện thoại sai định dạng')),
+    requireField: () => yup.string().required(() => requireField('')),
     /**
      * @param ref : the name of StyledInputForm want to compare
      * @param isMatchCurrentPassword
@@ -59,8 +59,8 @@ const yupValidate = {
             .string()
             .required(() => requireField('password'))
             .trim(i18next.t('error.trimSpace'))
-            .strict(true);
-        // .min(PASSWORD_MIN_LENGTH, i18next.t('error.passwordLength'))
+            .strict(true)
+            .min(PASSWORD_MIN_LENGTH, i18next.t('Mật khẩu quá ngắn'));
         // .max(PASSWORD_MAX_LENGTH, i18next.t('error.passwordLength'))
         // .matches(REGEX_PASSWORD, i18next.t('error.validatePassword'));
     },

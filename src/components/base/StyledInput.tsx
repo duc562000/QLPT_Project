@@ -144,6 +144,7 @@ const styles = ScaledSheet.create({
         fontSize: '12@ms',
         color: Themes.COLORS.borderInputError,
         marginLeft: '5@s',
+        paddingHorizontal: 16,
     },
     container: {
         width: Metrics.screenWidth * 0.8,
@@ -154,6 +155,7 @@ const styles = ScaledSheet.create({
         color: Themes.COLORS.textSecondary,
         fontWeight: '600',
         fontSize: 18,
+        paddingHorizontal: 16,
     },
     rightView: {
         position: 'absolute',

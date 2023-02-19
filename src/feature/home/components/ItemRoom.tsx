@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
-import StyledHeader from 'components/common/StyledHeader';
 import { StyledTouchable, StyledText } from 'components/base';
 
 const ItemRoom: FunctionComponent = (props: any) => {

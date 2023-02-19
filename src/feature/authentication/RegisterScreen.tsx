@@ -9,7 +9,6 @@ import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useLogin } from 'utilities/authenticate/AuthenticateService';
 import yupValidate from 'utilities/yupValidate';
 import * as yup from 'yup';
 import firestore from '@react-native-firebase/firestore';
@@ -107,8 +106,8 @@ const RegisterScreen: FunctionComponent = () => {
                         name="name"
                         customPlaceHolder="Họ và Tên"
                         returnKeyType="done"
-                        maxLength={20}
                         label="Họ và Tên"
+                        customLabelStyle={{ paddingLeft: 0 }}
                     />
                     <StyledInputForm
                         name="password"
@@ -116,7 +115,7 @@ const RegisterScreen: FunctionComponent = () => {
                         ref={passwordRef}
                         secureTextEntry
                         returnKeyType="done"
-                        maxLength={20}
+                        customLabelStyle={{ paddingLeft: 0 }}
                         label="Mật khẩu"
                     />
                     <StyledInputForm
@@ -125,7 +124,7 @@ const RegisterScreen: FunctionComponent = () => {
                         ref={passwordConfirmRef}
                         secureTextEntry
                         returnKeyType="done"
-                        maxLength={20}
+                        customLabelStyle={{ paddingLeft: 0 }}
                         label="Nhập lại mật khẩu"
                     />
                 </FormProvider>

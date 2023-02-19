@@ -53,6 +53,7 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                     <StyledInputForm
                         customStyle={styles.input}
                         name="date"
+                        customLabelStyle={{ paddingLeft: 0 }}
                         customPlaceHolder="Ngày thu tiền hàng tháng"
                         maxLength={32}
                         label="Ngày thu tiền hàng tháng:"
@@ -61,6 +62,7 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                     <StyledInputForm
                         customStyle={styles.input}
                         name="price"
+                        customLabelStyle={{ paddingLeft: 0 }}
                         customPlaceHolder="Giá phòng"
                         maxLength={20}
                         label="Giá phòng:"
