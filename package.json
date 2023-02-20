@@ -24,7 +24,7 @@
         "rebase": "git checkout develop && git pull origin develop && git checkout - && git rebase -",
         "buildAndroid": "cd android && ./gradlew assembleRelease&& adb -d install app/build/outputs/apk/release/app-release.apk",
         "bundleIOS": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
-        "android-run-debug-develop": "react-native run-android --no-jetifier --variant=devDebug --appId 'com.amela.vn.dev'",
+        "android-run-debug-develop": "react-native run-android --no-jetifier --variant=devDebug --appId 'com.apps.qlptproject.dev'",
         "android-run-debug-staging": "react-native run-android --no-jetifier --variant=stagingDebug --appId 'com.amela.vn.stg'",
         "android-run-debug-product": "react-native run-android --no-jetifier --variant=productDebug --appId 'com.amela.vn.prod'",
         "android-run-release-develop": "cd android && rm -rf build && rm -rf android/build && cd .. && react-native run-android --no-jetifier --variant=devRelease --appId 'com.amela.vn.dev'",
