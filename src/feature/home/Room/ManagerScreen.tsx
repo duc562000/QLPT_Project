@@ -6,28 +6,22 @@ import { dataRoom } from 'utilities/staticData';
 import { navigate } from 'navigation/NavigationService';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import Images from 'assets/images';
-import ItemRoom from '../components/ItemRoom';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
+import ItemRoom from '../components/ItemRoom';
 
 const ManagerScreen: FunctionComponent = ({ route }: any) => {
-    const [roomData, setRoomData] = useState<any>({});
+    const [roomData, setRoomData] = useState<any>([]);
     const [loading, setLoading] = useState(false);
-    // const apiRoom = firestore().collection('Users');
     useEffect(() => {
         getRoom();
     }, []);
     const getRoom = async () => {
         try {
             setLoading(true);
-            const res = await firestore()
-                .collection('Users')
-                .doc(auth().currentUser?.uid)
-                .collection('room')
-                .doc('room')
-                .get();
+            const res = await firestore().collection('Room').doc(auth().currentUser?.uid).get();
             setRoomData(res?._data?.listRoom);
         } catch (error) {
             AlertMessage(String(error));
@@ -38,10 +32,11 @@ const ManagerScreen: FunctionComponent = ({ route }: any) => {
     };
     const renderItem = ({ item }: any) => (
         <ItemRoom
-            roomName={item?.id}
+            roomName={item?.name}
             onPress={() => navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.DETAIL_ROOM_SCREEN, { item, callBack: getRoom })}
         />
     );
+    console.log(roomData);
     return (
         <View style={styles.container}>
             <StyledHeader

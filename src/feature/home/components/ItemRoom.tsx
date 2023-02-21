@@ -7,7 +7,7 @@ const ItemRoom: FunctionComponent = (props: any) => {
     const { onPress, roomName, item, isStatus, isPay } = props;
     return (
         <StyledTouchable onPress={onPress} customStyle={styles.viewButton}>
-            <StyledText customStyle={{ color: Themes.COLORS.white }} originValue={`Phòng ${roomName || ''}`} />
+            <StyledText customStyle={{ color: Themes.COLORS.white }} originValue={roomName} />
             {isStatus && (
                 <StyledText
                     customStyle={styles.textDescription}

@@ -46,7 +46,11 @@ export const useLogin = (): LoginRequest => {
             store.dispatch(userInfoActions.getUserInfoRequest(res?._data.token));
             AuthenticateService.handlerLogin({ token: res?._data?.token });
         } catch (e: any) {
-            AlertMessage('Tài khoản mật khẩu không chính xác');
+            if (e?.code === 'auth/user-not-found') {
+                AlertMessage('Tài khoản hoặc mật khẩu chưa chính xác');
+            } else {
+                AlertMessage(String(e));
+            }
         } finally {
             setLoading(false);
         }

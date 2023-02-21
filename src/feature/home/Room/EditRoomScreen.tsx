@@ -39,14 +39,18 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
     const onSubmitEdit = async (value: any) => {
         try {
             // setLoading(true);
-            await firestore()
-                .collection('Users')
+            const res = await firestore()
+                .collection('Room')
                 .doc(auth().currentUser?.uid)
-                .collection('room')
-                .doc('room')
                 .update({
-                    ...value,
+                    listRoom[0]: [{}, { id: 5 }],
                 });
+
+            // .update({
+            //     ...value,
+            //     status: status?.[0] === 'Đã thuê' ? true : false,
+            // });
+            console.log(res);
         } catch (error) {
             AlertMessage(String(error));
         }
@@ -62,7 +66,7 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                         callback,
                     })
                 }
-                title={`Phòng ${item?.id || dataParams?.id}`}
+                title={item?.name || dataParams?.name}
             />
             <View style={styles.body}>
                 {isEdit || dataParams ? (
@@ -84,7 +88,7 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                                     customErrorStyle={{ paddingLeft: 0 }}
                                     customPlaceHolder="Ngày thuê"
                                     label="Ngày thuê:"
-                                    defaultValue={dataParams?.dateRoomRental}
+                                    defaultValue={dataParams?.dateRent}
                                 />
                                 <StyledInputForm
                                     customStyle={styles.input}
@@ -93,7 +97,7 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                                     customPlaceHolder="Ngày thu tiền hàng tháng"
                                     customErrorStyle={{ paddingLeft: 0 }}
                                     label="Ngày thu tiền hàng tháng:"
-                                    defaultValue={dataParams?.dateCollection}
+                                    defaultValue={String(dataParams?.dateCollection)}
                                 />
                             </>
                         )}
@@ -130,7 +134,7 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                             customStyle={styles.input}
                             customPlaceHolder="Ngày thuê:"
                             label="Ngày thuê:"
-                            value={item?.dateRoomRental}
+                            value={item?.dateRent}
                             customLabelStyle={{ paddingHorizontal: 0 }}
                             editable={false}
                         />
@@ -138,7 +142,7 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                             customStyle={styles.input}
                             customPlaceHolder="Ngày thu tiền hàng tháng"
                             label="Ngày thu tiền hàng tháng:"
-                            value={item?.dateCollection}
+                            value={String(item?.dateCollection)}
                             editable={false}
                             customLabelStyle={{ paddingHorizontal: 0 }}
                         />
