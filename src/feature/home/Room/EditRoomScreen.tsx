@@ -1,8 +1,7 @@
+/* eslint-disable no-unneeded-ternary */
 import React, { FunctionComponent, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import StyledHeader from 'components/common/StyledHeader';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
 import StyledDropdown from 'components/base/StyledDropdown';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -15,15 +14,21 @@ import Images from 'assets/images';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import AlertMessage from 'components/base/AlertMessage';
+import { useNavigation } from '@react-navigation/native';
+import { dataSelectStatusRoom } from 'utilities/staticData';
+import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
+import { listRoomRef } from './ManagerScreen';
 
 const EditRoomScreen: FunctionComponent = ({ route }: any) => {
-    const { item, callback, dataParams, isEdit } = route?.params || {};
-    const [date, setDate] = useState<any[]>([item?.date]);
-    const [status, setStatus] = useState<any[]>([dataParams?.status ? 'Đã thuê' : 'Trống']);
+    const { item, dataParams, isEdit, callbackParams, getRoom } = route?.params || {};
+    const navigation = useNavigation<any>();
+    const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState<any[]>([
+        dataParams?.status ? dataSelectStatusRoom[0] : dataSelectStatusRoom[1],
+    ]);
     const yupSchema = yup.object().shape({
-        dateRoomRental: status?.[0] === 'Đã thuê' && yupValidate.requireField(),
-        dateCollection: status?.[0] === 'Đã thuê' && yupValidate.requireField(),
-        price: yupValidate.requireField(),
+        roomPrice: yupValidate.requireField(),
+        roomName: yupValidate.requireField(),
     });
     const form = useForm({
         mode: 'onChange', // validate form onChange
@@ -38,21 +43,22 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
     } = form;
     const onSubmitEdit = async (value: any) => {
         try {
-            // setLoading(true);
-            const res = await firestore()
-                .collection('Room')
-                .doc(auth().currentUser?.uid)
-                .update({
-                    listRoom[0]: [{}, { id: 5 }],
-                });
-
-            // .update({
-            //     ...value,
-            //     status: status?.[0] === 'Đã thuê' ? true : false,
-            // });
-            console.log(res);
+            setLoading(true);
+            await listRoomRef.doc(`${dataParams?.id}`).update({
+                dateCollection: status[0] === dataSelectStatusRoom[0] ? value?.dateCollection : '',
+                dateRent: status[0] === dataSelectStatusRoom[0] ? value?.dateRent : '',
+                roomName: value?.roomName,
+                roomPrice: 2023,
+                status: status[0] === dataSelectStatusRoom[0] ? true : false,
+            });
+            callbackParams?.();
+            getRoom?.();
+            navigation.pop(2);
         } catch (error) {
             AlertMessage(String(error));
+            setLoading(false);
+        } finally {
+            setLoading(false);
         }
     };
     return (
@@ -63,27 +69,38 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                     navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ROOM_SCREEN, {
                         dataParams: item,
                         isEdit: true,
-                        callback,
+                        callbackParams: getRoom,
                     })
                 }
-                title={item?.name || dataParams?.name}
+                title={item?.roomName || dataParams?.roomName}
             />
-            <View style={styles.body}>
+            <StyledOverlayLoading visible={loading} />
+            <ScrollView contentContainerStyle={styles.body}>
                 {isEdit || dataParams ? (
                     <FormProvider {...form}>
+                        <StyledInputForm
+                            customStyle={styles.input}
+                            name="roomName"
+                            customLabelStyle={{ paddingLeft: 0 }}
+                            customErrorStyle={{ paddingLeft: 0 }}
+                            customPlaceHolder="Tên phòng"
+                            label="Tên phòng:"
+                            defaultValue={dataParams?.roomName}
+                        />
+
                         <StyledDropdown
                             label="Tình trạng:"
-                            data={['Đã thuê', 'Trống']}
+                            data={dataSelectStatusRoom}
                             multiple={false}
                             initSelected={status}
                             onChangeValue={setStatus}
                             // containerStyle={styles.dropdown}
                         />
-                        {status?.[0] === 'Đã thuê' && (
+                        {status[0] === dataSelectStatusRoom[0] && (
                             <>
                                 <StyledInputForm
                                     customStyle={styles.input}
-                                    name="dateRoomRental"
+                                    name="dateRent"
                                     customLabelStyle={{ paddingLeft: 0 }}
                                     customErrorStyle={{ paddingLeft: 0 }}
                                     customPlaceHolder="Ngày thuê"
@@ -104,7 +121,7 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
 
                         <StyledInputForm
                             customStyle={styles.input}
-                            name="price"
+                            name="roomPrice"
                             customLabelStyle={{ paddingLeft: 0 }}
                             customPlaceHolder="Giá phòng"
                             maxLength={20}
@@ -156,7 +173,7 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                         />
                     </>
                 )}
-            </View>
+            </ScrollView>
         </View>
     );
 };
@@ -170,6 +187,7 @@ const styles = StyleSheet.create({
     },
     body: {
         paddingHorizontal: 16,
+        flex: 1,
     },
     input: {
         width: Metrics.screenWidth * 0.92,

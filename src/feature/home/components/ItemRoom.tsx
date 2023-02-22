@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { StyledTouchable, StyledText } from 'components/base';
 import { Themes } from 'assets/themes';
 
@@ -7,7 +7,7 @@ const ItemRoom: FunctionComponent = (props: any) => {
     const { onPress, roomName, item, isStatus, isPay } = props;
     return (
         <StyledTouchable onPress={onPress} customStyle={styles.viewButton}>
-            <StyledText customStyle={{ color: Themes.COLORS.white }} originValue={roomName} />
+            <StyledText customStyle={{ color: Themes.COLORS.white }} originValue={roomName || ''} />
             {isStatus && (
                 <StyledText
                     customStyle={styles.textDescription}

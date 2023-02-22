@@ -104,6 +104,8 @@ export const dataBill = [
     },
 ];
 
+export const dataSelectStatusRoom = ['Đã Thuê', 'Trống'];
+
 export const dataPicker = [
     'label1',
     'label2',

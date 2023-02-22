@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 import React, { FunctionComponent, useState } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import StyledHeader from 'components/common/StyledHeader';
@@ -9,14 +10,21 @@ import * as yup from 'yup';
 import { StyledInputForm, StyledText, StyledTouchable } from 'components/base';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
+import { dataSelectStatusRoom } from 'utilities/staticData';
+import yupValidate from 'utilities/yupValidate';
+import AlertMessage from 'components/base/AlertMessage';
+import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
+import { goBack } from 'navigation/NavigationService';
+import { listRoomRef } from './ManagerScreen';
 
-const AddRoomScreen: FunctionComponent = () => {
-    const [date, setDate] = useState<any[]>([]);
+const AddRoomScreen: FunctionComponent = ({ route }: any) => {
+    const { getRoom } = route?.params || {};
     const [status, setStatus] = useState<any[]>([]);
     const yupSchema = yup.object().shape({
-        // email: yupValidate.email(),
-        // password: yupValidate.password(),
+        roomPrice: yupValidate.requireField(),
+        roomName: yupValidate.requireField(),
     });
+    const [loading, setLoading] = useState(false);
     const form = useForm({
         mode: 'onChange', // validate form onChange
         // defaultValues: DEFAULT_FORM,
@@ -26,50 +34,90 @@ const AddRoomScreen: FunctionComponent = () => {
     });
     const {
         formState: { isValid },
+        handleSubmit,
     } = form;
+
+    const onCreateRoom = async (value: any) => {
+        try {
+            setLoading(true);
+            const res = await listRoomRef.add({
+                dateCollection: status[0] === dataSelectStatusRoom[0] ? value?.dateCollection : '',
+                dateRent: status[0] === dataSelectStatusRoom[0] ? value?.dateRent : '',
+                roomName: value?.roomName,
+                roomPrice: Number(value.roomPrice),
+                status: status[0] === dataSelectStatusRoom[0] ? true : false,
+            });
+            await listRoomRef.doc(`${res?.id}`).update({
+                id: res?.id,
+            });
+            getRoom();
+            goBack();
+        } catch (error) {
+            setLoading(false);
+            AlertMessage(String(error));
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <StyledHeader title={'Edit room'} />
-            <ScrollView style={styles.body}>
+            <StyledHeader title={'Thêm phòng'} />
+            <StyledOverlayLoading visible={loading} />
+            <ScrollView contentContainerStyle={styles.body}>
                 <FormProvider {...form}>
                     <StyledInputForm
                         customStyle={styles.input}
                         name="roomName"
-                        customPlaceHolder="Nhập tên phòng:"
-                        maxLength={20}
-                        label="Nhập tên phòng:"
+                        customLabelStyle={{ paddingLeft: 0 }}
+                        customErrorStyle={{ paddingLeft: 0 }}
+                        customPlaceHolder="Tên phòng"
+                        label="Tên phòng:"
                     />
+
                     <StyledDropdown
                         label="Tình trạng:"
-                        data={['Đã thuê', 'Trống']}
+                        data={dataSelectStatusRoom}
                         multiple={false}
                         initSelected={status}
                         onChangeValue={setStatus}
                         // containerStyle={styles.dropdown}
                     />
-                    <StyledDropdown
-                        label="Ngày thuê:"
-                        data={['01/01/2023', '02/01/2023']}
-                        multiple={false}
-                        initSelected={date}
-                        onChangeValue={setDate}
-                        // containerStyle={styles.dropdown}
-                    />
+                    {status[0] === dataSelectStatusRoom[0] && (
+                        <>
+                            <StyledInputForm
+                                customStyle={styles.input}
+                                name="dateRent"
+                                customLabelStyle={{ paddingLeft: 0 }}
+                                customErrorStyle={{ paddingLeft: 0 }}
+                                customPlaceHolder="Ngày thuê"
+                                label="Ngày thuê:"
+                            />
+                            <StyledInputForm
+                                customStyle={styles.input}
+                                name="dateCollection"
+                                customLabelStyle={{ paddingLeft: 0 }}
+                                customPlaceHolder="Ngày thu tiền hàng tháng"
+                                customErrorStyle={{ paddingLeft: 0 }}
+                                label="Ngày thu tiền hàng tháng:"
+                            />
+                        </>
+                    )}
+
                     <StyledInputForm
                         customStyle={styles.input}
-                        name="date"
-                        customPlaceHolder="Ngày thu tiền hàng tháng"
-                        maxLength={32}
-                        label="Ngày thu tiền hàng tháng:"
-                    />
-                    <StyledInputForm
-                        customStyle={styles.input}
-                        name="price"
+                        name="roomPrice"
+                        customLabelStyle={{ paddingLeft: 0 }}
                         customPlaceHolder="Giá phòng"
                         maxLength={20}
+                        customErrorStyle={{ paddingLeft: 0 }}
                         label="Giá phòng:"
                     />
-                    <StyledTouchable customStyle={styles.button}>
+                    <StyledTouchable
+                        onPress={handleSubmit(onCreateRoom)}
+                        disabled={!isValid}
+                        customStyle={[styles.button, { backgroundColor: isValid ? '#2B4BF2' : '#ccc' }]}
+                    >
                         <StyledText customStyle={styles.textBtn} originValue="Thêm phòng" />
                     </StyledTouchable>
                 </FormProvider>
