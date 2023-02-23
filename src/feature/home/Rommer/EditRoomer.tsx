@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import StyledHeader from 'components/common/StyledHeader';
-
-import StyledDropdown from 'components/base/StyledDropdown';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import yupValidate from 'utilities/yupValidate';
@@ -10,14 +10,19 @@ import * as yup from 'yup';
 import { StyledInputForm, StyledText, StyledTouchable } from 'components/base';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
+import AlertMessage from 'components/base/AlertMessage';
+import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
+import { goBack } from 'navigation/NavigationService';
 
 const EditRoomer: FunctionComponent = ({ route }: any) => {
-    const { item } = route?.params || {};
-    const [date, setDate] = useState<any[]>([item?.date]);
-    const [status, setStatus] = useState<any[]>([item?.status]);
+    const [loading, setLoading] = useState(false);
+    const { item, getRoom } = route?.params || {};
+    console.log(item);
     const yupSchema = yup.object().shape({
-        // email: yupValidate.email(),
-        // password: yupValidate.password(),
+        nameRoomer: yupValidate.requireField(),
+        cccdNumber: yupValidate.requireField(),
+        phoneNumber: yupValidate.phone(),
+        address: yupValidate.requireField(),
     });
     const form = useForm({
         mode: 'onChange', // validate form onChange
@@ -26,60 +31,97 @@ const EditRoomer: FunctionComponent = ({ route }: any) => {
         reValidateMode: 'onChange',
         criteriaMode: 'firstError', // first error from each field will be gathered.
     });
+    const onSubmitEdit = async (value: any) => {
+        try {
+            setLoading(true);
+            await firestore()
+                .collection('Rooms')
+                .doc(auth().currentUser?.uid)
+                .collection('listRoom')
+                .doc(`${item?.id}`)
+                .update({
+                    roomerRental: {
+                        nameRoomer: value.nameRoomer,
+                        cccdNumber: value.cccdNumber,
+                        phoneNumber: value.phoneNumber,
+                        address: value.address,
+                    },
+                });
+            await firestore()
+                .collection('Rooms')
+                .doc(auth().currentUser?.uid)
+                .collection('listRoom')
+                .doc(`${item?.id}`)
+                .update({
+                    status: true,
+                });
+            // callbackParams?.();
+            getRoom?.();
+            goBack();
+        } catch (error) {
+            AlertMessage(String(error));
+            setLoading(false);
+        } finally {
+            setLoading(false);
+        }
+    };
     const {
         formState: { isValid },
+        handleSubmit,
     } = form;
     return (
         <View style={styles.container}>
-            <StyledHeader title={item?.name} />
-            <ScrollView style={styles.body}>
+            <StyledHeader title={item?.roomName} />
+            <StyledOverlayLoading visible={loading} />
+            <ScrollView contentContainerStyle={styles.body}>
                 <FormProvider {...form}>
                     <StyledInputForm
                         customStyle={styles.input}
-                        name="date"
+                        name="nameRoomer"
                         customPlaceHolder="Tên người thuê:"
-                        maxLength={32}
                         label="Tên người thuê:"
-                        defaultValue={item?.userName}
+                        defaultValue={item?.roomerRental?.nameRoomer}
+                        customLabelStyle={{ paddingLeft: 0 }}
+                        customErrorStyle={{ paddingLeft: 0 }}
                     />
                     <StyledInputForm
                         customStyle={styles.input}
-                        name="price"
+                        name="cccdNumber"
                         customPlaceHolder="CCCD"
-                        maxLength={20}
-                        label="CCCD"
-                        defaultValue={item?.cccd}
+                        keyboardType="number-pad"
+                        label="Số CCCD"
+                        defaultValue={item?.roomerRental?.cccdNumber}
+                        customLabelStyle={{ paddingLeft: 0 }}
+                        customErrorStyle={{ paddingLeft: 0 }}
                     />
                     <StyledInputForm
                         customStyle={styles.input}
                         name="phoneNumber"
                         customPlaceHolder="Số điện thoại"
-                        maxLength={32}
                         label="Số điện thoại:"
-                        defaultValue={item?.phone}
+                        maxLength={10}
+                        keyboardType="number-pad"
+                        defaultValue={item?.roomerRental?.phoneNumber}
+                        customLabelStyle={{ paddingLeft: 0 }}
+                        customErrorStyle={{ paddingLeft: 0 }}
                     />
                     <StyledInputForm
                         customStyle={styles.input}
-                        name="prices"
+                        name="address"
                         customPlaceHolder="Địa chỉ thường trú:"
-                        maxLength={20}
-                        label="Địa chỉ thường trú::"
-                        defaultValue={item?.address}
+                        label="Địa chỉ thường trú:"
+                        defaultValue={item?.roomerRental?.address}
+                        customLabelStyle={{ paddingLeft: 0 }}
+                        customErrorStyle={{ paddingLeft: 0 }}
                     />
-                    {!item?.status && (
-                        <StyledInputForm
-                            customStyle={styles.input}
-                            name="price"
-                            customPlaceHolder="Giá phòng"
-                            maxLength={20}
-                            label="Giá phòng:"
-                            defaultValue={item?.price}
-                        />
-                    )}
-                    <StyledTouchable customStyle={styles.button}>
+                    <StyledTouchable
+                        disabled={!isValid}
+                        onPress={handleSubmit(onSubmitEdit)}
+                        customStyle={[styles.button, { backgroundColor: isValid ? '#2B4BF2' : '#ccc' }]}
+                    >
                         <StyledText
                             customStyle={styles.textBtn}
-                            originValue={item?.status ? 'Chỉnh sửa' : 'Thêm người thuê'}
+                            originValue={item?.roomerRental ? 'Chỉnh sửa' : 'Thêm người thuê'}
                         />
                     </StyledTouchable>
                 </FormProvider>

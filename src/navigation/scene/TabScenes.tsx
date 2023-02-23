@@ -1,6 +1,6 @@
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import EditRoomScreen from 'feature/home/Room/EditRoomScreen';
+import EditRoomScreen from 'feature/home/RoomManager/EditRoomScreen';
 // import Images from 'assets/images';
 // import AccountScreen from 'feature/account/AccountScreen';
 import HomeDataScreen from 'feature/home/HomeDataScreen';
@@ -15,7 +15,7 @@ import StyledTabBar from 'navigation/components/StyledTabBar';
 import navigationConfigs, { tabScreenOptions } from 'navigation/config/options';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import React from 'react';
-import AddRoomScreen from 'feature/home/Room/AddRoomScreen';
+import AddRoomScreen from 'feature/home/RoomManager/AddRoomScreen';
 import MangerRoommer from 'feature/home/Rommer/MangerRoommer';
 import EditRoomer from 'feature/home/Rommer/EditRoomer';
 import ManagerBill from 'feature/home/Bill/ManagerBill';

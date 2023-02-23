@@ -21,7 +21,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 const EditRoomScreen: FunctionComponent = ({ route }: any) => {
-    const { item, dataParams, isEdit, callbackParams, getRoom } = route?.params || {};
+    const { item, dataParams, callbackParams, getRoom } = route?.params || {};
     const navigation = useNavigation<any>();
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<any[]>([
@@ -81,8 +81,8 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                 title={item?.roomName || dataParams?.roomName}
             />
             <StyledOverlayLoading visible={loading} />
-            <ScrollView contentContainerStyle={styles.body}>
-                {isEdit || dataParams ? (
+            <ScrollView contentContainerStyle={[styles.body, !dataParams && { flex: 1 }]}>
+                {dataParams ? (
                     <FormProvider {...form}>
                         <StyledInputForm
                             customStyle={styles.input}
@@ -130,7 +130,7 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                             name="roomPrice"
                             customLabelStyle={{ paddingLeft: 0 }}
                             customPlaceHolder="Giá phòng"
-                            maxLength={20}
+                            keyboardType="number-pad"
                             customErrorStyle={{ paddingLeft: 0 }}
                             label="Giá phòng:"
                             defaultValue={String(dataParams?.roomPrice || '')}
@@ -193,7 +193,6 @@ const styles = StyleSheet.create({
     },
     body: {
         paddingHorizontal: 16,
-        flex: 1,
     },
     input: {
         width: Metrics.screenWidth * 0.92,

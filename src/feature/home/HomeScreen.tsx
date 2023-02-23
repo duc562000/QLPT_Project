@@ -10,20 +10,13 @@ const HomeScreen: FunctionComponent = () => {
         <View style={{ flex: 1, justifyContent: 'center' }}>
             <View style={styles.body}>
                 <StyledTouchable
-                    onPress={() =>
-                        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_SCREEN, { name: 'Quản lý phòng', isRoom: true })
-                    }
+                    onPress={() => navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_SCREEN)}
                     customStyle={styles.buttonNavigate}
                 >
                     <StyledText customStyle={styles.textButton} originValue="Quản lý phòng" />
                 </StyledTouchable>
                 <StyledTouchable
-                    onPress={() =>
-                        navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_ROOMER_SCREEN, {
-                            name: 'Quản lý nguời thuê',
-                            isRommer: true,
-                        })
-                    }
+                    onPress={() => navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_ROOMER_SCREEN)}
                     customStyle={styles.buttonNavigate}
                 >
                     <StyledText customStyle={styles.textButton} originValue="Quản lý nguời thuê" />

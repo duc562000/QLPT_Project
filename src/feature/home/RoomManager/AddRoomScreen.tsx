@@ -17,7 +17,6 @@ import AlertMessage from 'components/base/AlertMessage';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import { goBack } from 'navigation/NavigationService';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { TextInput } from 'react-native-gesture-handler';
 
 const AddRoomScreen: FunctionComponent = ({ route }: any) => {
     const { getRoom } = route?.params || {};
@@ -120,7 +119,7 @@ const AddRoomScreen: FunctionComponent = ({ route }: any) => {
                         name="roomPrice"
                         customLabelStyle={{ paddingLeft: 0 }}
                         customPlaceHolder="Giá phòng"
-                        maxLength={20}
+                        keyboardType="number-pad"
                         customErrorStyle={{ paddingLeft: 0 }}
                         label="Giá phòng:"
                     />

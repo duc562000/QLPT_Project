@@ -7,9 +7,10 @@ import HomeDetailScreen from 'feature/home/HomeDetailScreen';
 import HomeUserListScreen from 'feature/home/HomeUserListScreen';
 import EditRoomer from 'feature/home/Rommer/EditRoomer';
 import MangerRoommer from 'feature/home/Rommer/MangerRoommer';
-import AddRoomScreen from 'feature/home/Room/AddRoomScreen';
-import EditRoomScreen from 'feature/home/Room/EditRoomScreen';
-import ManagerScreen from 'feature/home/Room/ManagerScreen';
+import ManagerRoomScreen from 'feature/home/RoomManager/ManagerRoomScreen';
+import AddRoomScreen from 'feature/home/RoomManager/AddRoomScreen';
+import EditRoomScreen from 'feature/home/RoomManager/EditRoomScreen';
+import ManagerScreen from 'feature/home/Settting/ManagerScreen';
 import SettingScreen from 'feature/home/Settting/SettingScreen';
 import React from 'react';
 import isEqual from 'react-fast-compare';
@@ -27,7 +28,8 @@ const AppStack = () => (
     <Host>
         <MainStack.Navigator screenOptions={navigationConfigs}>
             <MainStack.Screen name={APP_ROUTE.MAIN_TAB} component={MainTabContainer} />
-            <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_SCREEN} component={ManagerScreen} />
+
+            <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_SCREEN} component={ManagerRoomScreen} />
             <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.EDIT_ROOM_SCREEN} component={EditRoomScreen} />
             <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.ADD_ROOM_SCREEN} component={AddRoomScreen} />
             <MainStack.Screen name={TAB_NAVIGATION_ROOT.HOME_ROUTE.MANAGER_ROOMER_SCREEN} component={MangerRoommer} />
