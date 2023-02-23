@@ -16,11 +16,11 @@ const AlertMessage = (
             cancel
                 ? [
                       {
-                          text: i18next.t('common.cancel'),
+                          text: i18next.t('Hủy'),
                           style: 'default',
                       },
                       {
-                          text: i18next.t('common.confirms'),
+                          text: textConfirm || i18next.t('common.confirms'),
                           onPress: () => {
                               if (typeof onPressOk === 'function') {
                                   onPressOk();

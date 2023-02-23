@@ -4,9 +4,9 @@ import { StyledTouchable, StyledText } from 'components/base';
 import { Themes } from 'assets/themes';
 
 const ItemRoom: FunctionComponent = (props: any) => {
-    const { onPress, roomName, item, isStatus, isPay } = props;
+    const { onPress, roomName, item, isStatus, isPay, onLongPress } = props;
     return (
-        <StyledTouchable onPress={onPress} customStyle={styles.viewButton}>
+        <StyledTouchable onLongPress={onLongPress} onPress={onPress} customStyle={styles.viewButton}>
             <StyledText customStyle={{ color: Themes.COLORS.white }} originValue={roomName || ''} />
             {isStatus && (
                 <StyledText

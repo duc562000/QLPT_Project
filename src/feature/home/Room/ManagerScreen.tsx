@@ -12,31 +12,41 @@ import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import { Themes } from 'assets/themes';
 import ItemRoom from '../components/ItemRoom';
 
-export const listRoomRef = firestore().collection('Rooms').doc(auth().currentUser?.uid).collection('listRoom');
-
 const ManagerScreen: FunctionComponent = ({ route }: any) => {
     const [roomData, setRoomData] = useState<any>([]);
     const [loading, setLoading] = useState(false);
-
     useEffect(() => {
         getRoom();
     }, []);
     const getRoom = async () => {
         try {
             setLoading(true);
-            const res = await listRoomRef.get();
+            const res = await firestore().collection('Rooms').doc(auth().currentUser?.uid).collection('listRoom').get();
             setRoomData(res.docs.map(doc => doc.data()));
         } catch (error) {
             AlertMessage(String(error));
             setLoading(false);
         } finally {
+            getRoom();
             setLoading(false);
         }
+    };
+    const onDeleteRoom = (id: any) => {
+        firestore().collection('Rooms').doc(auth().currentUser?.uid).collection('listRoom').doc(`${id}`).delete();
     };
     const renderItem = ({ item }: any) => (
         <ItemRoom
             roomName={item?.roomName}
             onPress={() => navigate(TAB_NAVIGATION_ROOT.HOME_ROUTE.DETAIL_ROOM_SCREEN, { item, getRoom })}
+            onLongPress={() =>
+                AlertMessage(
+                    'Mọi thông tin của phòng sẽ bị xóa, bạn có chắc chắn không ?',
+                    'Thông báo',
+                    'Xóa phòng',
+                    () => onDeleteRoom(item?.id),
+                    true,
+                )
+            }
         />
     );
     return (

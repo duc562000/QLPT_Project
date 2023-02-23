@@ -1,8 +1,9 @@
 /* eslint-disable no-unneeded-ternary */
 import React, { FunctionComponent, useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import StyledHeader from 'components/common/StyledHeader';
-
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import StyledDropdown from 'components/base/StyledDropdown';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -15,7 +16,8 @@ import yupValidate from 'utilities/yupValidate';
 import AlertMessage from 'components/base/AlertMessage';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
 import { goBack } from 'navigation/NavigationService';
-import { listRoomRef } from './ManagerScreen';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { TextInput } from 'react-native-gesture-handler';
 
 const AddRoomScreen: FunctionComponent = ({ route }: any) => {
     const { getRoom } = route?.params || {};
@@ -40,16 +42,25 @@ const AddRoomScreen: FunctionComponent = ({ route }: any) => {
     const onCreateRoom = async (value: any) => {
         try {
             setLoading(true);
-            const res = await listRoomRef.add({
-                dateCollection: status[0] === dataSelectStatusRoom[0] ? value?.dateCollection : '',
-                dateRent: status[0] === dataSelectStatusRoom[0] ? value?.dateRent : '',
-                roomName: value?.roomName,
-                roomPrice: Number(value.roomPrice),
-                status: status[0] === dataSelectStatusRoom[0] ? true : false,
-            });
-            await listRoomRef.doc(`${res?.id}`).update({
-                id: res?.id,
-            });
+            const res = await firestore()
+                .collection('Rooms')
+                .doc(auth().currentUser?.uid)
+                .collection('listRoom')
+                .add({
+                    dateCollection: status[0] === dataSelectStatusRoom[0] ? value?.dateCollection : '',
+                    dateRent: status[0] === dataSelectStatusRoom[0] ? value?.dateRent : '',
+                    roomName: value?.roomName,
+                    roomPrice: Number(value.roomPrice),
+                    status: status[0] === dataSelectStatusRoom[0] ? true : false,
+                });
+            await firestore()
+                .collection('Rooms')
+                .doc(auth().currentUser?.uid)
+                .collection('listRoom')
+                .doc(`${res?.id}`)
+                .update({
+                    id: res?.id,
+                });
             getRoom();
             goBack();
         } catch (error) {
@@ -64,7 +75,7 @@ const AddRoomScreen: FunctionComponent = ({ route }: any) => {
         <View style={styles.container}>
             <StyledHeader title={'Thêm phòng'} />
             <StyledOverlayLoading visible={loading} />
-            <ScrollView contentContainerStyle={styles.body}>
+            <KeyboardAwareScrollView contentContainerStyle={styles.body}>
                 <FormProvider {...form}>
                     <StyledInputForm
                         customStyle={styles.input}
@@ -121,7 +132,7 @@ const AddRoomScreen: FunctionComponent = ({ route }: any) => {
                         <StyledText customStyle={styles.textBtn} originValue="Thêm phòng" />
                     </StyledTouchable>
                 </FormProvider>
-            </ScrollView>
+            </KeyboardAwareScrollView>
         </View>
     );
 };

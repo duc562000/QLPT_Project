@@ -17,7 +17,8 @@ import AlertMessage from 'components/base/AlertMessage';
 import { useNavigation } from '@react-navigation/native';
 import { dataSelectStatusRoom } from 'utilities/staticData';
 import StyledOverlayLoading from 'components/base/StyledOverlayLoading';
-import { listRoomRef } from './ManagerScreen';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const EditRoomScreen: FunctionComponent = ({ route }: any) => {
     const { item, dataParams, isEdit, callbackParams, getRoom } = route?.params || {};
@@ -44,13 +45,18 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
     const onSubmitEdit = async (value: any) => {
         try {
             setLoading(true);
-            await listRoomRef.doc(`${dataParams?.id}`).update({
-                dateCollection: status[0] === dataSelectStatusRoom[0] ? value?.dateCollection : '',
-                dateRent: status[0] === dataSelectStatusRoom[0] ? value?.dateRent : '',
-                roomName: value?.roomName,
-                roomPrice: 2023,
-                status: status[0] === dataSelectStatusRoom[0] ? true : false,
-            });
+            await firestore()
+                .collection('Rooms')
+                .doc(auth().currentUser?.uid)
+                .collection('listRoom')
+                .doc(`${dataParams?.id}`)
+                .update({
+                    dateCollection: status[0] === dataSelectStatusRoom[0] ? value?.dateCollection : '',
+                    dateRent: status[0] === dataSelectStatusRoom[0] ? value?.dateRent : '',
+                    roomName: value?.roomName,
+                    roomPrice: 2023,
+                    status: status[0] === dataSelectStatusRoom[0] ? true : false,
+                });
             callbackParams?.();
             getRoom?.();
             navigation.pop(2);
