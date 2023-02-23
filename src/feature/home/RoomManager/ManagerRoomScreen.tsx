@@ -29,8 +29,15 @@ const ManagerRoomScreen: FunctionComponent = () => {
             setLoading(false);
         }
     };
-    const onDeleteRoom = (id: any) => {
-        firestore().collection('Rooms').doc(auth().currentUser?.uid).collection('listRoom').doc(`${id}`).delete();
+    const onDeleteRoom = async (id: any) => {
+        try {
+            setLoading(true);
+            firestore().collection('Rooms').doc(auth().currentUser?.uid).collection('listRoom').doc(`${id}`).delete();
+            getRoom();
+        } catch (error) {
+            AlertMessage(String(error));
+            setLoading(false);
+        }
     };
     const renderItem = ({ item }: any) => (
         <ItemRoom
