@@ -20,7 +20,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 const AddRoomScreen: FunctionComponent = ({ route }: any) => {
     const { getRoom } = route?.params || {};
-    const [status, setStatus] = useState<any[]>([]);
+    const [status, setStatus] = useState<any[]>(['Trống']);
     const yupSchema = yup.object().shape({
         roomPrice: yupValidate.requireField(),
         roomName: yupValidate.requireField(),
@@ -49,7 +49,7 @@ const AddRoomScreen: FunctionComponent = ({ route }: any) => {
                     dateCollection: status[0] === dataSelectStatusRoom[0] ? value?.dateCollection : '',
                     dateRent: status[0] === dataSelectStatusRoom[0] ? value?.dateRent : '',
                     roomName: value?.roomName,
-                    roomPrice: Number(value.roomPrice),
+                    roomPrice: Number(value?.roomPrice),
                     status: status[0] === dataSelectStatusRoom[0] ? true : false,
                 });
             await firestore()

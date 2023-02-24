@@ -17,7 +17,6 @@ import { goBack } from 'navigation/NavigationService';
 const EditRoomer: FunctionComponent = ({ route }: any) => {
     const [loading, setLoading] = useState(false);
     const { item, getRoom } = route?.params || {};
-    console.log(item);
     const yupSchema = yup.object().shape({
         nameRoomer: yupValidate.requireField(),
         cccdNumber: yupValidate.requireField(),

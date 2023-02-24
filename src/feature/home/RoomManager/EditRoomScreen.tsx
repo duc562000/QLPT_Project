@@ -54,7 +54,7 @@ const EditRoomScreen: FunctionComponent = ({ route }: any) => {
                     dateCollection: status[0] === dataSelectStatusRoom[0] ? value?.dateCollection : '',
                     dateRent: status[0] === dataSelectStatusRoom[0] ? value?.dateRent : '',
                     roomName: value?.roomName,
-                    roomPrice: 2023,
+                    roomPrice: Number(value?.roomPrice),
                     status: status[0] === dataSelectStatusRoom[0] ? true : false,
                 });
             callbackParams?.();

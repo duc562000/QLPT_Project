@@ -42,9 +42,10 @@ export const useLogin = (): LoginRequest => {
         try {
             setLoading(true);
             await auth().signInWithEmailAndPassword(options?.email, options?.password);
-            const res = await firestore().collection('Users').doc(auth().currentUser?.uid).get();
-            store.dispatch(userInfoActions.getUserInfoRequest(res?._data.token));
-            AuthenticateService.handlerLogin({ token: res?._data?.token });
+            const res = await (await firestore().collection('Users').doc(auth().currentUser?.uid).get()).data();
+            store.dispatch(userInfoActions.getUserInfoRequest(res?.token));
+            store.dispatch(userInfoActions.getUserInfoSuccess(res));
+            AuthenticateService.handlerLogin({ ...res });
         } catch (e: any) {
             if (e?.code === 'auth/user-not-found') {
                 AlertMessage('Tài khoản hoặc mật khẩu chưa chính xác');

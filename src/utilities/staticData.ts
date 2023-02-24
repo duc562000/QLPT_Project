@@ -105,6 +105,7 @@ export const dataBill = [
 ];
 
 export const dataSelectStatusRoom = ['Đã Thuê', 'Trống'];
+export const dataPriceRoom = ['Đã Thanh Toán', 'Chưa Thanh Thoán'];
 
 export const dataPicker = [
     'label1',

@@ -17,7 +17,7 @@ const ItemRoom: FunctionComponent = (props: any) => {
             {isPay && (
                 <StyledText
                     customStyle={styles.textDescription}
-                    originValue={item?.status ? 'Đã thanh toán' : 'Chưa thanh toán'}
+                    originValue={item?.bill?.statusPriceRoom ? 'Đã thanh toán' : 'Chưa thanh toán'}
                 />
             )}
         </StyledTouchable>

@@ -1,8 +1,7 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import StyledHeader from 'components/common/StyledHeader';
 
-import StyledDropdown from 'components/base/StyledDropdown';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import yupValidate from 'utilities/yupValidate';
@@ -17,6 +16,8 @@ import Images from 'assets/images';
 import { TAB_NAVIGATION_ROOT } from 'navigation/config/routes';
 import { goBack, navigate } from 'navigation/NavigationService';
 import AlertMessage from 'components/base/AlertMessage';
+import { userInfoActions } from 'app-redux/slices/userInfoSlice';
+import { store } from 'app-redux/store';
 
 const SettingScreen: FunctionComponent = (props: any) => {
     const { dataParams, callBack } = props?.route?.params || {};
@@ -31,8 +32,9 @@ const SettingScreen: FunctionComponent = (props: any) => {
     const getUser = async () => {
         try {
             setLoading(true);
-            const res = await apiUser.doc(auth().currentUser?.uid).get();
-            setDataUser(res?._data);
+            const res = await (await apiUser.doc(auth().currentUser?.uid).get()).data();
+            store.dispatch(userInfoActions.getUserInfoSuccess(res));
+            setDataUser(res);
         } catch (error) {
             AlertMessage(String(error));
             setLoading(false);
@@ -76,9 +78,9 @@ const SettingScreen: FunctionComponent = (props: any) => {
                         callBack: getUser,
                     })
                 }
-                title={dataParams ? 'Sửa thông tin' : 'Cài đặt'}
+                title={dataParams ? 'Sửa thông tin' : 'Thông tin cá nhân'}
             />
-            <ScrollView contentContainerStyle={styles.body}>
+            <ScrollView contentContainerStyle={[styles.body, !dataParams && { flex: 1 }]}>
                 <>
                     {dataParams ? (
                         <FormProvider {...form}>
@@ -172,7 +174,7 @@ const styles = StyleSheet.create({
     },
     body: {
         // alignItems: 'center',
-        flex: 1,
+        // flex: 1,
     },
     input: {
         width: Metrics.screenWidth * 0.92,
