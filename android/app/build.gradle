@@ -288,7 +288,7 @@ android {
     productFlavors {
         dev {
             dimension "environment"
-            resValue "string", "app_name", project.env.get("ANDROID_APP_ID")
+            resValue "string", "app_name", project.env.get("APP_NAME")
             resValue "string", "CodePushDeploymentKey", project.env.get("CODEPUSH_ANDROID_DEVELOPMENT_KEY")
             signingConfig signingConfigs.staging
         }
